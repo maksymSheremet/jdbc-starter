@@ -4,6 +4,7 @@ import my.code.starter.util.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.Driver;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -11,6 +12,29 @@ public class JdbcRunner {
     public static void main(String[] args) throws SQLException {
         Class<Driver> driverClass = Driver.class;
 
+    }
+
+    private static void exampleResultSet() throws SQLException {
+        String sql = """
+                SELECT *
+                FROM ticket
+                """;
+        try (Connection connection = ConnectionManager.open();
+             Statement statement = connection.createStatement()) {
+            //Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
+            System.out.println(connection.getSchema());
+            System.out.println(connection.getTransactionIsolation());
+
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                System.out.println(resultSet.getLong("id"));
+                System.out.println(resultSet.getString("passenger_no"));
+                System.out.println(resultSet.getBigDecimal("cost"));
+//                resultSet.updateLong("id", 100);
+//                resultSet.beforeFirst();
+                System.out.println("--------------------------------");
+            }
+        }
     }
 
     private static void exampleDML() throws SQLException {
