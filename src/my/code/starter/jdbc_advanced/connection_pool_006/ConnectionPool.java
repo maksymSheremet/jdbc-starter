@@ -1,7 +1,7 @@
 package my.code.starter.jdbc_advanced.connection_pool_006;
 
-import my.code.starter.exception.ConnectionException;
-import my.code.starter.util.PropertiesUtil;
+import my.code.starter.jdbc_core.exception.ConnectionException;
+import my.code.starter.jdbc_core.util.PropertiesUtil;
 
 import java.lang.reflect.Proxy;
 import java.sql.Connection;

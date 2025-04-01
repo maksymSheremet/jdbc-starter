@@ -1,6 +1,6 @@
 package my.code.starter.jdbc_advanced.fetchSize_001;
 
-import my.code.starter.util.ConnectionManager;
+import my.code.starter.jdbc_core.util.ConnectionManager;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;

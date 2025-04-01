@@ -1,6 +1,6 @@
 package my.code.starter.jdbc_advanced.batch_requests_004;
 
-import my.code.starter.util.ConnectionManager;
+import my.code.starter.jdbc_core.util.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.SQLException;

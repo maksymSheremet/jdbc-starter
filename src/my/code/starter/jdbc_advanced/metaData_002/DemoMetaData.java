@@ -1,6 +1,6 @@
 package my.code.starter.jdbc_advanced.metaData_002;
 
-import my.code.starter.util.ConnectionManager;
+import my.code.starter.jdbc_core.util.ConnectionManager;
 
 import java.sql.SQLException;
 
