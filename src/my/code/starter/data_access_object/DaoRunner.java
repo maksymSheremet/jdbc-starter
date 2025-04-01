@@ -5,11 +5,15 @@ import my.code.starter.data_access_object.dto.TicketFilter;
 import my.code.starter.data_access_object.entity.Ticket;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 public class DaoRunner {
     public static void main(String[] args) {
+        var ticket = TicketDao.getInstance().getById(5L);
+        System.out.println(ticket);
+    }
+
+    private static void findFilterTicket() {
         var ticketFilter = new TicketFilter(3, 0, "A1", "Евгений Кудрявцев");
         var tickets = TicketDao.getInstance().findAll(ticketFilter);
         System.out.println(tickets);
@@ -44,7 +48,7 @@ public class DaoRunner {
         Ticket ticket = new Ticket();
         ticket.setPassengerNo("1234567");
         ticket.setPassengerName("Test");
-        ticket.setFlightId(3L);
+//        ticket.setFlight(3L);
         ticket.setSeatNo("B3");
         ticket.setCost(BigDecimal.TEN);
 
