@@ -1,5 +1,6 @@
 package my.code.starter.data_access_object.dao;
 
+import my.code.starter.data_access_object.dto.TicketFilter;
 import my.code.starter.data_access_object.entity.Ticket;
 import my.code.starter.data_access_object.exception.DaoException;
 import my.code.starter.jdbc_advanced.connection_pool_006.ConnectionPool;
@@ -10,6 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TicketDao {
     private static final String DELETE_TICKET_SQL = "DELETE FROM ticket  WHERE id = ?";
@@ -39,6 +41,39 @@ public class TicketDao {
 
     public static TicketDao getInstance() {
         return INSTANCE;
+    }
+
+    public List<Ticket> findAll(TicketFilter filter) {
+        List<Object> parameters = new ArrayList<>();
+        List<String> whereSql = new ArrayList<>();
+        if (filter.seatNo() != null) {
+            whereSql.add("seat_no LIKE ?");
+            parameters.add("%" + filter.seatNo() + "%");
+        }
+        if (filter.passengerName() != null) {
+            whereSql.add("passenger_name = ?");
+            parameters.add(filter.passengerName());
+        }
+        parameters.add(filter.limit());
+        parameters.add(filter.offset());
+        var where = whereSql.stream()
+                .collect(Collectors.joining(" AND ", " WHERE ", " LIMIT ? OFFSET ? "));
+        var sql = FIND_ALL_TICKETS_SQL + (where.isEmpty() ? " " : where);
+        try (var connection = ConnectionPool.getConnection();
+             var statement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < parameters.size(); i++) {
+                statement.setObject(i + 1, parameters.get(i));
+            }
+            System.out.println(statement);
+            var resultSet = statement.executeQuery();
+            List<Ticket> tickets = new ArrayList<>();
+            while (resultSet.next()) {
+                tickets.add(buildTicket(resultSet));
+            }
+            return tickets;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
     }
 
     public List<Ticket> findAllTickets() {
