@@ -11,6 +11,9 @@ public class Ticket {
     private String seatNo;
     private BigDecimal cost;
 
+    public Ticket() {
+    }
+
     public Ticket(Long id, String passengerNo, String passengerName, Long flightId, String seatNo, BigDecimal cost) {
         this.id = id;
         this.passengerNo = passengerNo;
