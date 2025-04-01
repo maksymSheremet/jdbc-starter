@@ -1,6 +1,7 @@
 package my.code.starter.data_access_object;
 
 import my.code.starter.data_access_object.dao.TicketDao;
+import my.code.starter.data_access_object.dto.TicketFilter;
 import my.code.starter.data_access_object.entity.Ticket;
 
 import java.math.BigDecimal;
@@ -9,6 +10,12 @@ import java.util.Optional;
 
 public class DaoRunner {
     public static void main(String[] args) {
+        var ticketFilter = new TicketFilter(3, 0, "A1", "Евгений Кудрявцев");
+        var tickets = TicketDao.getInstance().findAll(ticketFilter);
+        System.out.println(tickets);
+    }
+
+    private static void faindAll() {
         TicketDao ticketDao = TicketDao.getInstance();
         var allTickets = ticketDao.findAllTickets();
         System.out.println(allTickets);
