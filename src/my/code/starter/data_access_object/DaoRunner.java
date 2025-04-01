@@ -4,10 +4,26 @@ import my.code.starter.data_access_object.dao.TicketDao;
 import my.code.starter.data_access_object.entity.Ticket;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 public class DaoRunner {
     public static void main(String[] args) {
+        TicketDao ticketDao = TicketDao.getInstance();
+        var allTickets = ticketDao.findAllTickets();
+        System.out.println(allTickets);
+    }
 
+    private static void updateTicket() {
+        TicketDao ticketDao = TicketDao.getInstance();
+        var mayBeTicket = ticketDao.getById(2L);
+        System.out.println(mayBeTicket);
+
+        mayBeTicket.ifPresent(ticket -> {
+            ticket.setCost(BigDecimal.valueOf(188.88));
+            var updatedTicket = ticketDao.update(ticket);
+            System.out.println(updatedTicket);
+        });
     }
 
     private static void deleteTest() {
