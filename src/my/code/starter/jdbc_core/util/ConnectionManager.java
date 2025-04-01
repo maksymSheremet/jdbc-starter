@@ -1,6 +1,6 @@
-package my.code.starter.util;
+package my.code.starter.jdbc_core.util;
 
-import my.code.starter.exception.ConnectionException;
+import my.code.starter.jdbc_core.exception.ConnectionException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

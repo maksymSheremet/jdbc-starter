@@ -1,8 +1,7 @@
-package my.code.starter;
+package my.code.starter.jdbc_core;
 
-import my.code.starter.util.ConnectionManager;
+import my.code.starter.jdbc_core.util.ConnectionManager;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;

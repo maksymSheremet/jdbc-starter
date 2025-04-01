@@ -1,6 +1,6 @@
 package my.code.starter.jdbc_advanced.blob_clob_005;
 
-import my.code.starter.util.ConnectionManager;
+import my.code.starter.jdbc_core.util.ConnectionManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
