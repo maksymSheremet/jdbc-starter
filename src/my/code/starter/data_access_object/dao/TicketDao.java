@@ -1,6 +1,7 @@
 package my.code.starter.data_access_object.dao;
 
 import my.code.starter.data_access_object.dto.TicketFilter;
+import my.code.starter.data_access_object.entity.Flight;
 import my.code.starter.data_access_object.entity.Ticket;
 import my.code.starter.data_access_object.exception.DaoException;
 import my.code.starter.jdbc_advanced.connection_pool_006.ConnectionPool;
@@ -26,15 +27,30 @@ public class TicketDao {
             """;
 
     private static final String FIND_ALL_TICKETS_SQL = """
-            SELECT id, passenger_no, passenger_name, flight_id, seat_no, cost 
+            SELECT ticket.id,
+            passenger_no,
+            passenger_name,
+            flight_id,
+            seat_no,
+            cost,
+            f.flight_no,
+            f.status,
+            f.aircraft_id,
+            f.arrival_airport_code,
+            f.arrival_date,
+            f.departure_airport_code,
+            f.departure_date
             FROM ticket
+            JOIN flight f
+            ON ticket.flight_id = f.id
             """;
 
     private static final String FIND_BY_ID_TICKET_SQL = FIND_ALL_TICKETS_SQL + """
-            WHERE id = ?
+            WHERE ticket.id = ?
             """;
 
     private static final TicketDao INSTANCE = new TicketDao();
+    private static final FlightDao flightDao  = FlightDao.getInstance();
 
     private TicketDao() {
     }
@@ -109,11 +125,24 @@ public class TicketDao {
     }
 
     private static Ticket buildTicket(ResultSet resultSet) throws SQLException {
+        var flight = new Flight(
+                resultSet.getLong("flight_id"),
+                resultSet.getString("flight_no"),
+                resultSet.getTimestamp("departure_date").toLocalDateTime(),
+                resultSet.getString("departure_airport_code"),
+                resultSet.getTimestamp("arrival_date").toLocalDateTime(),
+                resultSet.getString("arrival_airport_code"),
+                resultSet.getInt("aircraft_id"),
+                resultSet.getString("status")
+        );
         return new Ticket(
                 resultSet.getLong("id"),
                 resultSet.getString("passenger_no"),
                 resultSet.getString("passenger_name"),
-                resultSet.getLong("flight_id"),
+//                flight,
+//                flightDao.findById(resultSet.getLong("flight_id")).orElse(null),
+                flightDao.findById(resultSet.getLong("flight_id"),
+                        resultSet.getStatement().getConnection()).orElse(null),
                 resultSet.getString("seat_no"),
                 resultSet.getBigDecimal("cost")
         );
@@ -125,7 +154,7 @@ public class TicketDao {
 
             prepareStatement.setString(1, ticket.getPassengerNo());
             prepareStatement.setString(2, ticket.getPassengerName());
-            prepareStatement.setLong(3, ticket.getFlightId());
+            prepareStatement.setLong(3, ticket.getFlight().id());
             prepareStatement.setString(4, ticket.getSeatNo());
             prepareStatement.setBigDecimal(5, ticket.getCost());
             prepareStatement.setLong(6, ticket.getId());
@@ -144,7 +173,7 @@ public class TicketDao {
 
             prepareStatement.setString(1, ticket.getPassengerNo());
             prepareStatement.setString(2, ticket.getPassengerName());
-            prepareStatement.setLong(3, ticket.getFlightId());
+            prepareStatement.setLong(3, ticket.getFlight().id());
             prepareStatement.setString(4, ticket.getSeatNo());
             prepareStatement.setBigDecimal(5, ticket.getCost());
 
